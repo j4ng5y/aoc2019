@@ -1,9 +1,38 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func fuelCalculator(mass float64) float64 {
 	return float64(int(mass/3) - 2)
+}
+
+func totalFuelCalculator(mass float64) float64 {
+	var totalFuel float64
+
+	massFuel := fuelCalculator(mass)
+	extraFuel := fuelCalculator(massFuel)
+
+	if extraFuel <= 0 {
+		totalFuel = massFuel
+	} else {
+		ef := extraFuel
+
+		for {
+			f := fuelCalculator(ef)
+			if f > 0 {
+				extraFuel = extraFuel + f
+				ef = f
+			} else {
+				break
+			}
+		}
+
+		totalFuel = massFuel + extraFuel
+	}
+
+	return totalFuel
 }
 
 func main() {
@@ -113,7 +142,7 @@ func main() {
 	var t float64
 
 	for _, i := range input {
-		t = t + fuelCalculator(i)
+		t = t + totalFuelCalculator(i)
 	}
 
 	fmt.Println(int(t))
